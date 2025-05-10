@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class budgetAnalysisManager {
+public class BudgetAnalysisManager {
     private List<Category> categories;
-    private List<Expense> expenses;
 
-    public budgetAnalysisManager() {
+    private List<Expense> expenses;
+    public BudgetAnalysisManager() {
         categories = new ArrayList<>();
         expenses = new ArrayList<>();
+       
     }
     
     public void addNewCategory(String categoryName, double budget) {
@@ -106,5 +107,25 @@ public class budgetAnalysisManager {
             }
         }
     }
-    
+    public void trackexpenses(){
+        System.out.println("\n\t\t\t\t Track Expenses \t\t\t\t");
+        for (Expense exp : expenses) {
+            System.out.printf("Category: %s\nDescription: %s\nAmount: $%.2f\n",
+            exp.getCategory(), exp.getDescription(), exp.getAmount());
+        }
+    }
+    public void tracktransactions() {
+        System.out.println("\n\t\t\t\t Track Transactions \t\t\t\t");
+        for(Transaction tran : Transaction.getAllTransactions()) {
+            System.out.printf("Transaction ID: %.0f\nAccount ID: %s\nTransaction Type: %s\nTransaction Date: %s\nRecipient ID: %s\nCategory: %s\nAmount: $%.2f\n",
+            tran.getTransactionID(), tran.getAccount().getAccountID(), tran.getTransactionType(), tran.getTransactionDate(), tran.getRecipientID(), tran.getCategory().getCategory(), tran.getAmount());
+        }
+    }
+    public void trackIncomes() {
+        System.out.println("\n\t\t\t\t Track Incomes \t\t\t\t");
+        for(Transaction tran : Transaction.getIncomes()) {
+            System.out.printf("Transaction ID: %.0f\nAccount ID: %s\nTransaction Type: %s\nTransaction Date: %s\nRecipient ID: %s\nCategory: %s\nAmount: $%.2f\n",
+            tran.getTransactionID(), tran.getAccount().getAccountID(), tran.getTransactionType(), tran.getTransactionDate(), tran.getRecipientID(), tran.getCategory().getCategory(), tran.getAmount());
+        }
+    }
 }
