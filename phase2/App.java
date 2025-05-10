@@ -5,10 +5,10 @@ public class App {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        UserServices userServices = new UserServices(null, null, null, 0); // Create a UserServices instance
+        UserServices userServices = new UserServices(null, null, null, 0); 
 
         while (true) {
-            System.out.print("1- SignUp\n2- SignIn\n3- LogOut\n4- ManageSettings\n5- Help & Support\n6- Goal Tracker\nEnter Your choice (1-6): ");
+            System.out.print("\n\t\t\t**Nazamha (Budgeting Application)**\n1- SignUp\n2- SignIn\n3- LogOut\n4- ManageSettings\n5- Goal Tracker\nEnter Your choice (1-5): ");
             String choice = scanner.nextLine();
 
             switch (choice) {
@@ -30,15 +30,11 @@ public class App {
                     break;
 
                 case "5":
-                    userServices.helpAndSupport();
-                    break;
-
-                case "6":
                     userServices.goalTracker();
                     break;
 
                 default:
-                    System.out.println("Invalid choice! Please enter a number between 1 and 6.");
+                    System.out.println("Invalid! Please enter a valid number (1-5)");
                     break;
             }
         }
