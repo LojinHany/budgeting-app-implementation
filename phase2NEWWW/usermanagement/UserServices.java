@@ -46,10 +46,10 @@ public class UserServices extends User{ // inherits from user and uses useraccou
 
             System.out.print("Create your password: ");
             String pass1 = scanner.nextLine();
-             while (!userAccount.validPass(pass1)){
+            while (!userAccount.validPass(pass1)){
                 System.out.print("Create your password: ");
                 pass1 = scanner.nextLine();
-             }
+            }
             
             System.out.print("Confirm your password: ");
             String pass2 = scanner.nextLine();
@@ -58,6 +58,10 @@ public class UserServices extends User{ // inherits from user and uses useraccou
                 System.out.println("Passwords do not match. Signup failed.\nPlease Recreate your Password");
                 System.out.print("Create your password: ");
                 pass1 = scanner.nextLine();
+                while (!userAccount.validPass(pass1)){
+                    System.out.print("Create your password: ");
+                    pass1 = scanner.nextLine();
+                }
                 System.out.print("Confirm your password: ");
                 pass2 = scanner.nextLine();
             }
@@ -126,7 +130,7 @@ public class UserServices extends User{ // inherits from user and uses useraccou
 
     public void ManageSettings() {
         while(true){
-            System.out.print("\n1- Profile\n2- Change Password\n3- Change Email\n4- Security Options\n5- Help And Support\n6- Exit \nEnter Your choice (1-4): ");
+            System.out.print("\n1- Profile\n2- Change Password\n3- Change Email\n4- Set Security \n5- Help And Support\n6- Exit \nEnter Your choice (1-4): ");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
@@ -144,25 +148,10 @@ public class UserServices extends User{ // inherits from user and uses useraccou
                     userAccount.updateEmail();
                     break;
                 case "4":
-                    while(true){
-                        System.out.print("\n1- View Security\n2- Update Security Options\n3- Exit\nEnter Your Choice(1-3): ");
-                        choice = scanner.nextLine();
-                        switch(choice){
-                            case "1":
-                                userAccount.setSecurityOptions();
-                                break;
-                            case "2":
-                                userAccount.updateSecurityOptions();
-                                break;
-                            case "3":
-                                return;
-                            default:
-                                System.out.println("Invalid! Please Enter a valid choice(1-3)");
-                        }
-                    }
-                    
+                    userAccount.setSecurityOptions();
+                    break;
                 case "5":
-                    helpAndSupport();
+                    userAccount.helpAndSupport();
                     break;
                 case"6":
                     return;
@@ -171,14 +160,6 @@ public class UserServices extends User{ // inherits from user and uses useraccou
                     break;
             }
         }
-    }
-    
-    public void helpAndSupport(){
-        System.out.println("\nFor Customer Support call: 01150446626 /  01064830839\n");
-    }
-
-    public void goalTracker(){
-        // will use expenses and transactions ig
     }
     
 }
