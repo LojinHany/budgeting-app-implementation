@@ -1,5 +1,6 @@
 package FinancialManagement;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;       
@@ -51,40 +52,46 @@ public class Transaction {
     public BudgetAnalysisManager getBudgetAnalysisManager() {
         return budgetAnalysisManager;
     }
-    public boolean dotransaction() {
-        // Validate the transaction details
-        if (amount < 0 || account.getAccountID() == null || transactionID <= 0 || transactionType == null || transactionDate == null) {
-            return false; // Invalid transaction details
-        }
-        else if (category.getBudget() < amount) {
-            System.out.println("Insufficient budget in the category: " + category.getCategory());
-            System.out.println("Current budget: " + category.getBudget());
-            return false; // Insufficient budget in the category
-        }
-        category.setBudget(category.getBudget() - amount); // Deduct the amount from the category budget
-        System.out.println("Amount deducted: " + amount);
-        System.out.println("New budget for category " + category.getCategory() + ": " + category.getBudget());
-        account.withdraw(amount); // Withdraw the amount from the account
-        System.out.println("Amount withdrawn from account " + account.getAccountID() + ": " + amount + "\nRemained balance: " + account.getBalance());
-        budgetAnalysisManager.addNewExpense(transactionType, category.getCategory(), amount); // Add the expense to the budget analysis manager
-        allTransactions.add(this);
-        return true; // Return true if the transaction is successful
+
+public boolean dotransaction() {
+    if (amount < 0 || account.getAccountID() == null || transactionID <= 0 || transactionType == null || transactionDate == null) {
+        return false;
+    } else if (category.getBudget() < amount) {
+        System.out.println("Insufficient budget in the category: " + category.getCategory());
+        System.out.println("Current budget: " + category.getBudget());
+        return false;
     }
-    public boolean ReceiveTransaction() {
-        // Validate the transaction details
-        if (amount < 0 || account.getAccountID() == null || transactionID <= 0 || transactionType == null || transactionDate == null) {
-            return false; // Invalid transaction details
-        }
-        account.deposit(amount); // Deposit the amount into the account
-        allTransactions.add(this);
-        Incomes.add(this);
-        System.out.println("Amount deposited into account " + account.getAccountID() + ": " + amount + " from account " + recipientID);
-        return true; // Return true if the transaction is successful
-           }
-    public static List<Transaction> getAllTransactions() {
-        return allTransactions;
+    category.setBudget(category.getBudget() - amount);
+    account.withdraw(amount);
+
+    allTransactions.add(this);
+    try {
+        UltraSimpleUserStorage.saveTransactions(allTransactions);
+    } catch (IOException e) {
+        System.err.println("Failed to save transactions: " + e.getMessage());
     }
-    public static List<Transaction> getIncomes() {
-        return Incomes;
+
+    return true;
+}
+
+public boolean ReceiveTransaction() {
+    if (amount < 0 || account.getAccountID() == null || transactionID <= 0 || transactionType == null || transactionDate == null) {
+        return false;
     }
+
+    account.deposit(amount);
+    allTransactions.add(this);
+    Incomes.add(this);
+
+    try {
+        UltraSimpleUserStorage.saveTransactions(allTransactions);
+        UltraSimpleUserStorage.saveIncomes(Incomes);
+    } catch (IOException e) {
+        System.err.println("Failed to save transactions/incomes: " + e.getMessage());
+    }
+
+    System.out.println("Amount deposited into account " + account.getAccountID() + ": " + amount + " from account " + recipientID);
+    return true;
+}
+
 }
